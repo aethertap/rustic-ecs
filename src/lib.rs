@@ -79,8 +79,8 @@ pub type EcsResult<T> = Result<T, NotFound>;
 ///
 /// `Component` is automatically implemented for all eligible types by the
 /// provided `impl`, so you don't have to worry about this. Hooray!
-pub trait Component: Any {}
-impl<T: Any> Component for T {}
+pub trait Component: Any+Send {}
+impl<T: Any+Send> Component for T {}
 
 /// List of component types.
 ///
@@ -177,7 +177,7 @@ pub struct Ecs {
 
 #[derive(Default)]
 struct ComponentMap {
-    map: HashMap<TypeId, Box<Any>>,
+    map: HashMap<TypeId, Box<dyn Any+Send>>,
 }
 
 impl ComponentMap {
